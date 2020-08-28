@@ -9,6 +9,11 @@ class LengthAwarePaginator extends BasePaginator {
 
 	public function __construct(BasePaginator $paginator, array $options = []) {
 		parent::__construct($paginator->items(), $paginator->total(), $paginator->perPage(), $paginator->currentPage(), $options);
+
+		$this->query = $paginator->query;
+		$this->path = $paginator->path;
+		$this->fragment = $paginator->fragment;
+		$this->pageName = $paginator->pageName;
 	}
 
 	/**
@@ -29,12 +34,21 @@ class LengthAwarePaginator extends BasePaginator {
 	 * @return array
 	 */
 	public function getHeaders() {
-		$links = [
-			'current' => $this->url($this->currentPage()),
-			'last' => $this->url($this->lastPage()),
-			'next' => $this->nextPageUrl(),
-			'prev' => $this->previousPageUrl(),
-		];
+		$links = [];
+
+		if($this->currentPage()>1){
+			$links = array_merge($links,[
+				'first' => $this->url(1),
+				'prev' => $this->previousPageUrl(),
+			]);
+		}
+
+		if($this->currentPage()<$this->lastPage()){
+			$links = array_merge($links, [
+				'next' => $this->nextPageUrl(),
+				'last' => $this->url($this->lastPage())
+			]);
+		}
 
 		$headers = [];
 
@@ -47,10 +61,7 @@ class LengthAwarePaginator extends BasePaginator {
 
 		return [
 			'Link' => implode(', ', $headers),
-			'X-Items-Total' => $this->total(),
-			'X-Items-Per-Page' => $this->perPage(),
-			'X-Items-From' => $this->firstItem(),
-			'X-Items-To' => $this->lastItem(),
+			'X-Total-Count' => $this->total()
 		];
 	}
 

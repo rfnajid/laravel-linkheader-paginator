@@ -24,7 +24,8 @@ class LengthAwarePaginatorTest extends TestCase {
 		$link = $paginator->getHeaders()['Link'];
 		$parsed = \phpish\link_header\parse($link);
 
-		$this->assertEquals('/?page=' . $this->page, $parsed['current'][0]['uri']);
+		$this->assertEquals('/?page=' . 1, $parsed['first'][0]['uri']);
+		$this->assertEquals('/?page=' . ($this->page - 1), $parsed['prev'][0]['uri']);
 		$this->assertEquals('/?page=' . ($this->page + 1), $parsed['next'][0]['uri']);
 		$this->assertEquals('/?page=' . ceil(count($this->items) / $this->per_page), $parsed['last'][0]['uri']);
 	}

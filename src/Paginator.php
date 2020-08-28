@@ -25,7 +25,7 @@ class Paginator extends BasePaginator {
 	 */
 	public function getHeaders() {
 		$links = [
-			'current' => $this->url($this->currentPage()),
+			'first'=> $this->url(1),
 			'next' => $this->nextPageUrl(),
 			'prev' => $this->previousPageUrl()
 		];
@@ -40,10 +40,7 @@ class Paginator extends BasePaginator {
 		}
 
 		return [
-			'Link' => implode(', ', $headers),
-			'X-Items-Per-Page' => $this->perPage(),
-			'X-Items-From' => $this->firstItem(),
-			'X-Items-To' => $this->lastItem(),
+			'Link' => implode(', ', $headers)
 		];
 	}
 

@@ -9,7 +9,7 @@ class SimplePaginatorTest extends TestCase {
 		'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
 		'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
 	];
-	private $page = 1;
+	private $page = 2;
 	private $per_page = 5;
 
 	public function testLink() {
@@ -17,7 +17,8 @@ class SimplePaginatorTest extends TestCase {
 		$link = $paginator->getHeaders()['Link'];
 		$parsed = \phpish\link_header\parse($link);
 
-		$this->assertEquals('/?page=' . $this->page, $parsed['current'][0]['uri']);
+		$this->assertEquals('/?page=' . 1, $parsed['first'][0]['uri']);
+		$this->assertEquals('/?page=' . ($this->page - 1), $parsed['prev'][0]['uri']);
 		$this->assertEquals('/?page=' . ($this->page + 1), $parsed['next'][0]['uri']);
 	}
 
